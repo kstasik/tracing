@@ -495,7 +495,7 @@ where
             let mut extensions = span.extensions_mut();
             if let Some(builder) = extensions.get_mut::<otel::SpanBuilder>() {
                 if builder.status_code.is_none() && *meta.level() == tracing_core::Level::ERROR {
-                    builder.status_code = Some(otel::StatusCode::Unknown);
+                    builder.status_code = Some(otel::StatusCode::Error);
                 }
 
                 if let Some(ref mut events) = builder.message_events {
