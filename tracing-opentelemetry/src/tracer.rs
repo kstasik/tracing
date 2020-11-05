@@ -79,7 +79,7 @@ impl PreSampledTracer for Tracer {
                     result.decision.clone()
                 } else if let Some(provider) = self.provider().as_ref() {
                     let mut result = provider.config().default_sampler.should_sample(
-                        builder.parent_reference.as_ref(),
+                        builder.parent_context.as_ref(),
                         trace_id,
                         &builder.name,
                         builder
