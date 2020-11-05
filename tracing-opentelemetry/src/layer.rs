@@ -136,7 +136,7 @@ impl<'a> field::Visit for SpanEventVisitor<'a> {
     /// Record events on the underlying OpenTelemetry [`Span`] from `u64` values.
     ///
     /// [`Span`]: https://docs.rs/opentelemetry/latest/opentelemetry/api/trace/span/trait.Span.html
-    fn record_u64(&mut self, field: &field::Field, value: u64) {
+    fn record_u64(&mut self, field: &field::Field, value: i64) {
         match field.name() {
             "message" => self.0.name = value.to_string(),
             // Skip fields that are actually log metadata that have already been handled
