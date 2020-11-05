@@ -213,7 +213,7 @@ impl<'a> field::Visit for SpanAttributeVisitor<'a> {
     ///
     /// [`Span`]: https://docs.rs/opentelemetry/latest/opentelemetry/api/trace/span/trait.Span.html
     fn record_u64(&mut self, field: &field::Field, value: u64) {
-        let attribute = KeyValue::new(field.name(), value);
+        let attribute = KeyValue::new(field.name(), value as i64);
         if let Some(attributes) = &mut self.0.attributes {
             attributes.push(attribute);
         } else {
