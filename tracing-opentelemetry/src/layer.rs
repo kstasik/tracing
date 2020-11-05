@@ -3,6 +3,7 @@ use opentelemetry::{Context as OtelContext, Key, KeyValue, api::trace as otel, a
 use std::any::TypeId;
 use std::fmt;
 use std::marker;
+use std::borrow::Cow;
 use std::time::SystemTime;
 use tracing_core::span::{self, Attributes, Id, Record};
 use tracing_core::{field, Event, Subscriber};
@@ -158,7 +159,7 @@ impl<'a> field::Visit for SpanEventVisitor<'a> {
             #[cfg(feature = "tracing-log")]
             name if name.starts_with("log.") => (),
             name => {
-                self.0.attributes.push(KeyValue::new(name, value));
+                self.0.attributes.push(KeyValue::new(name, Cow::from(value)));
             }
         }
     }
