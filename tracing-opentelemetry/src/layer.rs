@@ -485,7 +485,7 @@ where
                 SystemTime::now(),
                 vec![
                     Key::new("level").string(meta.level().to_string()),
-                    Key::new("target").string(meta.target()),
+                    Key::new("target").string(format!("{}", meta.target())),
                 ],
             );
             event.record(&mut SpanEventVisitor(&mut otel_event));
