@@ -3,7 +3,6 @@ use opentelemetry::{Context as OtelContext, Key, KeyValue, api::trace as otel, a
 use std::any::TypeId;
 use std::fmt;
 use std::marker;
-use std::borrow::Cow;
 use std::time::SystemTime;
 use tracing_core::span::{self, Attributes, Id, Record};
 use tracing_core::{field, Event, Subscriber};
@@ -231,7 +230,7 @@ impl<'a> field::Visit for SpanAttributeVisitor<'a> {
         } else if field.name() == SPAN_KIND_FIELD {
             self.0.span_kind = str_to_span_kind(value);
         } else {
-            let attribute = KeyValue::new(field.name(), value);
+            let attribute = KeyValue::new(field.name(), format!("{}", value));
             if let Some(attributes) = &mut self.0.attributes {
                 attributes.push(attribute);
             } else {
