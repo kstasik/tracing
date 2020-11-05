@@ -94,7 +94,7 @@ impl OpenTelemetrySpanExt for tracing::Span {
             }
         });
 
-        let span_reference = span_reference.unwrap_or_else(otel::SpanReference::empty_context);
+        let span_reference = span_reference.unwrap_or_else(otel::SpanContext::empty_context);
         let compat_span = CompatSpan(span_reference);
         Context::current_with_span(compat_span)
     }
@@ -102,7 +102,7 @@ impl OpenTelemetrySpanExt for tracing::Span {
 
 /// A compatibility wrapper for an injectable OpenTelemetry span reference.
 #[derive(Debug)]
-struct CompatSpan(otel::SpanReference);
+struct CompatSpan(otel::SpanContext);
 impl otel::Span for CompatSpan {
     fn add_event_with_timestamp(
         &self,
@@ -120,7 +120,7 @@ impl otel::Span for CompatSpan {
     /// information into [`Carrier`]s.
     ///
     /// [`Carrier`]: https://docs.rs/opentelemetry/latest/opentelemetry/api/context/propagation/trait.Carrier.html
-    fn span_reference(&self) -> otel::SpanReference {
+    fn span_reference(&self) -> otel::SpanContext {
         self.0.clone()
     }
 
