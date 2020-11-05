@@ -120,7 +120,7 @@ impl otel::Span for CompatSpan {
     /// information into [`Carrier`]s.
     ///
     /// [`Carrier`]: https://docs.rs/opentelemetry/latest/opentelemetry/api/context/propagation/trait.Carrier.html
-    fn span_reference(&self) -> otel::SpanContext {
+    fn span_context(&self) -> otel::SpanContext {
         self.0.clone()
     }
 
