@@ -41,7 +41,7 @@ pub trait PreSampledTracer {
 impl PreSampledTracer for otel::NoopTracer {
     fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanContext {
         builder
-            .parent_reference
+            .parent_context
             .clone()
             .unwrap_or_else(otel::SpanContext::empty_context)
     }
@@ -63,10 +63,10 @@ impl PreSampledTracer for Tracer {
                 .unwrap_or_else(otel::SpanId::invalid)
         });
         let (trace_id, trace_flags) = builder
-            .parent_reference
+            .parent_context
             .as_ref()
-            .filter(|parent_reference| parent_reference.is_valid())
-            .map(|parent_reference| (parent_reference.trace_id(), parent_reference.trace_flags()))
+            .filter(|parent_context| parent_context.is_valid())
+            .map(|parent_context| (parent_context.trace_id(), parent_context.trace_flags()))
             .unwrap_or_else(|| {
                 let trace_id = builder.trace_id.unwrap_or_else(|| {
                     self.provider()
