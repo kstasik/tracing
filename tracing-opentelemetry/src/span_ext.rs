@@ -1,5 +1,5 @@
 use crate::layer::WithContext;
-use opentelemetry::api::{trace as otel, trace::TraceContextExt, Context, KeyValue};
+use opentelemetry::api::{trace as otel, trace::TraceContextExt, context::Context, core::KeyValue};
 use std::time::SystemTime;
 
 /// Utility functions to allow tracing [`Span`]s to accept and return
