@@ -29,7 +29,7 @@ use opentelemetry::sdk::trace::{SamplingDecision, Tracer};
 /// [`OpenTelemetrySpanExt::context`]: trait.OpenTelemetrySpanExt.html#tymethod.context
 pub trait PreSampledTracer {
     /// Produce a pre-sampled span reference for the given span builder.
-    fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanReference;
+    fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanContext;
 
     /// Generate a new trace id.
     fn new_trace_id(&self) -> otel::TraceId;
@@ -39,11 +39,11 @@ pub trait PreSampledTracer {
 }
 
 impl PreSampledTracer for otel::NoopTracer {
-    fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanReference {
+    fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanContext {
         builder
             .parent_reference
             .clone()
-            .unwrap_or_else(otel::SpanReference::empty_context)
+            .unwrap_or_else(otel::SpanContext::empty_context)
     }
 
     fn new_trace_id(&self) -> otel::TraceId {
@@ -56,7 +56,7 @@ impl PreSampledTracer for otel::NoopTracer {
 }
 
 impl PreSampledTracer for Tracer {
-    fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanReference {
+    fn sampled_span_reference(&self, builder: &mut otel::SpanBuilder) -> otel::SpanContext {
         let span_id = builder.span_id.unwrap_or_else(|| {
             self.provider()
                 .map(|provider| provider.config().id_generator.new_span_id())
@@ -111,7 +111,7 @@ impl PreSampledTracer for Tracer {
                 (trace_id, trace_flags)
             });
 
-        otel::SpanReference::new(trace_id, span_id, trace_flags, false, Default::default())
+        otel::SpanContext::new(trace_id, span_id, trace_flags, false, Default::default())
     }
 
     fn new_trace_id(&self) -> otel::TraceId {
