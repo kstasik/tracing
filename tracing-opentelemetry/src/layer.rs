@@ -159,7 +159,7 @@ impl<'a> field::Visit for SpanEventVisitor<'a> {
             #[cfg(feature = "tracing-log")]
             name if name.starts_with("log.") => (),
             name => {
-                self.0.attributes.push(KeyValue::new(name, Cow::from(value)));
+                self.0.attributes.push(KeyValue::new(name, format!("{}", value)));
             }
         }
     }
