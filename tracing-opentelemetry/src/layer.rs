@@ -412,10 +412,10 @@ where
             .with_span_id(self.tracer.new_span_id());
 
         // Set optional parent span reference from attrs
-        builder.parent_reference = self.parent_span_reference(attrs, &ctx);
+        builder.parent_context = self.parent_span_reference(attrs, &ctx);
 
         // Ensure trace id exists so children are matched properly.
-        if builder.parent_reference.is_none() {
+        if builder.parent_context.is_none() {
             let existing_otel_span_reference = OtelContext::current().span().span_reference();
             if existing_otel_span_reference.is_valid() {
                 builder.trace_id = Some(existing_otel_span_reference.trace_id());
