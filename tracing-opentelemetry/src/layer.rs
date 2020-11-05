@@ -347,7 +347,7 @@ where
         &self,
         attrs: &Attributes<'_>,
         ctx: &Context<'_, S>,
-    ) -> Option<otel::SpanReference> {
+    ) -> Option<otel::SpanContext> {
         // If a span is specified, it _should_ exist in the underlying `Registry`.
         if let Some(parent) = attrs.parent() {
             let span = ctx.span(parent).expect("Span not found, this is a bug");
@@ -559,8 +559,8 @@ mod tests {
     }
 
     impl PreSampledTracer for TestTracer {
-        fn sampled_span_reference(&self, _builder: &mut otel::SpanBuilder) -> otel::SpanReference {
-            otel::SpanReference::empty_context()
+        fn sampled_span_reference(&self, _builder: &mut otel::SpanBuilder) -> otel::SpanContext {
+            otel::SpanContext::empty_context()
         }
         fn new_trace_id(&self) -> otel::TraceId {
             otel::TraceId::invalid()
@@ -571,10 +571,10 @@ mod tests {
     }
 
     #[derive(Debug, Clone)]
-    struct TestSpan(otel::SpanReference);
+    struct TestSpan(otel::SpanContext);
     impl otel::Span for TestSpan {
         fn add_event_with_timestamp(&self, _: String, _: SystemTime, _: Vec<KeyValue>) {}
-        fn span_reference(&self) -> otel::SpanReference {
+        fn span_reference(&self) -> otel::SpanContext {
             self.0.clone()
         }
         fn is_recording(&self) -> bool {
@@ -618,7 +618,7 @@ mod tests {
         let tracer = TestTracer(Arc::new(Mutex::new(None)));
         let subscriber = tracing_subscriber::registry().with(layer().with_tracer(tracer.clone()));
         let trace_id = otel::TraceId::from_u128(42);
-        let existing_cx = OtelContext::current_with_span(TestSpan(otel::SpanReference::new(
+        let existing_cx = OtelContext::current_with_span(TestSpan(otel::SpanContext::new(
             trace_id,
             otel::SpanId::from_u64(1),
             0,
