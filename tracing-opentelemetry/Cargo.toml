@@ -22,7 +22,7 @@ edition = "2018"
 default = ["tracing-log"]
 
 [dependencies]
-opentelemetry = { git = "https://github.com/open-telemetry/opentelemetry-rust", rev = "3e1948ecba63749fd0d7a7d1490ea22716f2ebf3" }
+opentelemetry = { git = "https://github.com/open-telemetry/opentelemetry-rust", rev = "3e1948ecba63749fd0d7a7d1490ea22716f2ebf3", features = ["trace", "metrics"] }
 tracing = { path = "../tracing", version = "0.2" }
 tracing-core = { path = "../tracing-core", version = "0.2" }
 tracing-subscriber = { path = "../tracing-subscriber", version = "0.3", default-features = false, features = ["registry"] }
