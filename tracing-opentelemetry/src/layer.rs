@@ -1,7 +1,6 @@
 use crate::PreSampledTracer;
-use opentelemetry::api::{
-    trace as otel, trace::TraceContextExt, context::Context as OtelContext, core::Key, core::KeyValue,
-};
+use opentelemetry::api::{trace as otel, trace::TraceContextExt};
+use opentelemetry::{ontext::Context as OtelContext, core::Key, core::KeyValue};
 use std::any::TypeId;
 use std::fmt;
 use std::marker;
