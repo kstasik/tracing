@@ -414,7 +414,7 @@ where
 
         // Ensure trace id exists so children are matched properly.
         if builder.parent_context.is_none() {
-            let existing_otel_span_reference = OtelContext::current().span().span_reference();
+            let existing_otel_span_reference = OtelContext::current().span().span_context();
             if existing_otel_span_reference.is_valid() {
                 builder.trace_id = Some(existing_otel_span_reference.trace_id());
             } else {
